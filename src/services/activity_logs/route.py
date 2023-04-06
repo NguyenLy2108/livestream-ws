@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Body, Request
 from .model import ActivityLog
 from connect.redis_connection import redis
-import config
+import config as config
 import time
 import jwt
 import hashlib

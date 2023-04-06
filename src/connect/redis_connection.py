@@ -1,5 +1,5 @@
 import aioredis
-import config
+import config as config
 
 cfg = config.Settings()
 
