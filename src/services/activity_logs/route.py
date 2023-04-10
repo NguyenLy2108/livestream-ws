@@ -1,10 +1,10 @@
+import json
 from fastapi import APIRouter, Body, Request
 from .model import ActivityLog
 from connect.redis_connection import redis
 import config as config
 import time
 import jwt
-import hashlib
 
 cfg = config.Settings()
 
@@ -14,13 +14,13 @@ router = APIRouter()
 async def activity_log(request: Request, payload: ActivityLog = Body(...)):     
     start = time.time()
     headers = {"{}".format(key):request.headers.get(key) for key in request.headers.keys()}       
-    variables = {}
+    variables = payload.variables
     decoded = {}
-    session = ""
+    session = ""    
 
     if "Authorization" in headers:
         session = headers["Authorization"]
-        session = hashlib.sha256(b"session").hexdigest()
+        session = hash(session)        
         token = headers["Authorization"].replace("Bearer","")
         try:
             decoded = jwt.decode(token, options={"verify_signature": False})
@@ -28,8 +28,7 @@ async def activity_log(request: Request, payload: ActivityLog = Body(...)):
             print(error)   
 
     if (payload.variables and "password" in payload.variables):
-        del payload.variables["password"]
-        variables = payload.variables    
+        del payload.variables["password"]            
 
     data_log = {
         "time": start,
@@ -40,9 +39,8 @@ async def activity_log(request: Request, payload: ActivityLog = Body(...)):
         "session": session,
         "header": headers,
         "userInfor": decoded
-    }   
-
-    redis.publish(cfg.redis_channel, data_log)
+    } 
+    redis.publish(cfg.redis_channel, json.dumps(data_log))
 
     return data_log 
 

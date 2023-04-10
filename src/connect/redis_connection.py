@@ -1,8 +1,11 @@
-import aioredis
+import redis
 import config as config
 
 cfg = config.Settings()
 
-redis = aioredis.from_url('redis://{}:{}'.format(cfg.redis_host,cfg.redis_port))
-
-print("Connected Redis")
+redis = redis.Redis(
+            host=cfg.redis_host,
+            port=cfg.redis_port,
+            decode_responses=True
+        )  
+print("----Connected Redis----")
