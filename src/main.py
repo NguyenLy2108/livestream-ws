@@ -71,7 +71,8 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             livestream = LivestreamStatusService()
             data = livestream.livestreams_of_currentday()                    
-            await manager.broadcast(f"Data: {json.dumps(data, default=str)}")            
+            await manager.broadcast(f"Data: {json.dumps(data, default=str)}")   
+            await asyncio.sleep(int(cfg.stream_delay))         
     except WebSocketDisconnect:
         manager.disconnect(websocket)  
 
