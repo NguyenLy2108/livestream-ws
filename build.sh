@@ -1,0 +1,1 @@
+sudo docker build -t 339126146861.dkr.ecr.ap-southeast-1.amazonaws.com/reviewty/impression-analyzer:1.1.1 .

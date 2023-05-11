@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.10
 
 RUN apt-get update 
 RUN apt-get install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
@@ -7,8 +7,7 @@ RUN apt-get install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 l
 COPY requirements.txt requirements.txt 
 RUN pip install -r ./requirements.txt 
 
-COPY ./src /app
-
+COPY src /app
 WORKDIR /app
 
-CMD uvicorn main:app --port 8000 --host 0.0.0.0 --workers ${NWORKER}
+CMD python main.py
